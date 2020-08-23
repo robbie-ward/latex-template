@@ -15,7 +15,7 @@
 \newcommand{\papertitle}{This Is My Paper Title}
 \newcommand{\papercitation}{Ward, R. 2019. \papertitle. Under review at \emph{Journal Name}.}
 \newcommand{\paperkeywords}{Science of Science, Organization, Networks, Bibliometrics}
-\newcommand{\acknowledgments}{I wish to thank Philip Shapira, John Walsh and Seokkyun Woo}
+\newcommand{\acknowledgments}{Red Bull Energy Drink}
 
 %-------------------------------------------------------------------------------------------
 % begin preamble setup
@@ -49,6 +49,11 @@
 \usepackage{setspace}                   % configure spacing between lines
 \usepackage{titlesec}                   % custom section and subsection heading
 \usepackage{url}                        % make nice line-breakble urls
+\usepackage[svgnames]{xcolor}	% add in extra colors
+\usepackage{tikz}
+\usetikzlibrary{trees}
+\usepackage{multirow}
+\usepackage{lscape}
 
 % location of figure files, via graphicx package
 \graphicspath{{./figures/}}
@@ -58,8 +63,8 @@
 	paper=letterpaper,         % paper size
 	top=3.8cm,                   % margin sizes
 	bottom=3.8cm,
-	left=4cm,
-	right=4cm}
+	left=2cm,					% originally 4cm for left and right
+	right=2cm}
 \setstretch{1.02}              % line spacing
 \clubpenalty=10000             % prevent orphans
 \widowpenalty=10000            % prevent widows
@@ -67,6 +72,9 @@
 % set section/subsection headings as the sans serif font, via titlesec package
 \titleformat{\section}{\normalfont\sffamily\large\bfseries\color{black}}{\thesection.}{0.3em}{}
 \titleformat{\subsection}{\normalfont\sffamily\small\bfseries\color{black}}{\thesubsection.}{0.3em}{}
+
+% change title spacing
+
 
 % make figure/table captions sans-serif small font
 \captionsetup{font={footnotesize,sf},labelfont=bf,labelsep=period}
@@ -79,14 +87,19 @@
 	pdfkeywords={\paperkeywords},
 	pdffitwindow=true,         % window fit to page when opened
 	breaklinks=true,           % break links that overflow horizontally
-	colorlinks=false,          % remove link color
+	colorlinks,						% add link color
+	citecolor = DarkSlateGray, % add link color
+	urlcolor = DarkSlateGray, % add url color
+	linkcolor = Black, 
+	%colorlinks=false,          % remove link color
 	pdfborder={0 0 0}          % remove link border
 }
 
 % configure watermark appearance: to turn it on/off use [final] argument at package import
-\SetWatermarkText{DRAFT}
+\SetWatermarkText{Draft}
 \SetWatermarkScale{1.3}
-\SetWatermarkLightness{0.9}
+\SetWatermarkLightness{0.90}
+
 
 %-------------------------------------------------------------------------------------------
 % end preamble setup, begin document
