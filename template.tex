@@ -12,32 +12,44 @@
 \newcommand{\myemail}{rward48@gatech.edu}
 \newcommand{\myaffiliation}{School of Public Policy\\Georgia Institute of Technology}
 \newcommand{\paperdate}{November 2019}
-\newcommand{\papertitle}{The STIP Cookbook}
+\newcommand{\papertitle}{Networks, Knowledge and Search Speed: \\Evidence from Covid-19 Drug Development} %social structure of recombinant search
+
+% Collective Search
 \newcommand{\papercitation}{Ward, R. 2019. \papertitle. Under review at \emph{Journal Name}.}
 \newcommand{\paperkeywords}{Science of Science, Organization, Networks, Bibliometrics}
 \newcommand{\acknowledgments}{Red Bull Energy Drink}
+
+\newtheorem{hypothesis}{Hypothesis}
+\newtheorem{proposition}{Proposition}
+\newtheorem{question}{Question}
 
 %-------------------------------------------------------------------------------------------
 % begin preamble setup
 %-------------------------------------------------------------------------------------------
 \RequirePackage[l2tabu,orthodox]{nag}   % warn if using any obsolete or outdated commands
-\documentclass[12pt,letterpaper]{article} % document style
+\documentclass[11pt,letterpaper]{article} % document style
 
 % import encoding and font packages for pdflatex, in order
 \usepackage[T1]{fontenc}                % output T1 font encoding (8-bit) so accented characters are a single glyph
 \usepackage[utf8]{inputenc}             % allow input of utf-8 encoded characters
-\usepackage{utopia}      %  crimson is other optoin             % document's serif font, in the style of minion pro | crimson
-\usepackage[scaled]{helvet}                     % document's sans serif font, helvetica
+\usepackage{utopia}                    % document's serif font, in the style of minion pro | crimson,  utopia is nice too
+\usepackage{helvet}                     % document's sans serif font, helvetica
 
 % import language and regionalization packages, in order
 \usepackage[strict,autostyle]{csquotes} % smart and nestable quote marks
 \usepackage[USenglish]{babel}           % automatically regionalize hyphens, quote marks, etc
 \usepackage{microtype}                  % improves text appearance with kerning, etc
+\usepackage{amsmath}
+\usepackage{amssymb}
 
 % import everything else
 \usepackage{abstract}                   % allow full-page title/abstract in twocolumn mode
-\renewcommand{\abstractnamefont}{\bf\sffamily}
+\renewcommand{\abstractnamefont}{\bf\large}
 \usepackage{authblk}                    % footnote-style author/affiliation info
+\setlength{\affilsep}{1em}
+%\renewcommand\Affilfont{\emph}
+%\renewcommand\Authfont{\sffamily\textbf{\sffamily}}
+
 \usepackage{booktabs}                   % better looking tables
 \usepackage{caption}                    % custom figure/table caption styles
 \usepackage[final]{draftwatermark}      % watermark paper as a draft
@@ -49,12 +61,41 @@
 \usepackage{rotating}                   % rotate wide tables or figures on a page to make them landscape
 \usepackage{setspace}                   % configure spacing between lines
 \usepackage{titlesec}                   % custom section and subsection heading
+
 \usepackage{url}                        % make nice line-breakble urls
 \usepackage[svgnames]{xcolor}	% add in extra colors
 \usepackage{tikz}
 \usetikzlibrary{trees}
+\usetikzlibrary{shapes,decorations,arrows,calc,arrows.meta,fit,automata,positioning}
+\tikzset{
+	-Latex,auto,node distance =1 cm and 1 cm,semithick,
+	state/.style ={ellipse, draw, minimum width = 0.7 cm},
+	point/.style = {circle, draw, inner sep=0.04cm,fill,node contents={}},
+	bidirected/.style={Latex-Latex,dashed},
+	el/.style = {inner sep=2pt, align=left, sloped}
+}
+\def\firstcircle{(90:1.75cm) circle (2.5cm)}
+\def\secondcircle{(210:1.75cm) circle (2.5cm)}
+\def\thirdcircle{(330:1.75cm) circle (2.5cm)}
+
+\renewcommand{\arraystretch}{1.5}
 \usepackage{multirow}
 \usepackage{lscape}
+\usepackage{threeparttable}
+\usepackage{array}
+\usepackage{subcaption} % allows for subfigures
+
+
+\newenvironment{conditions}[1][where:]
+{#1 \begin{tabular}[t]{>{$}l<{$} @{${}={}$} l}}
+	{\end{tabular}\\[\belowdisplayskip]}
+%make endnotes
+\usepackage{endnotes}
+
+\let\footnote=\endnote
+
+\usepackage{nomencl}
+\makenomenclature
 
 % location of figure files, via graphicx package
 \graphicspath{{./figures/}}
@@ -62,26 +103,28 @@
 % configure the page layout, via geometry package
 \geometry{
 	paper=letterpaper,         % paper size
-	top=3.8cm,                   % margin sizes
-	bottom=3.8cm,
-	left=3.8cm,					% originally 4cm for left and right
-	right=3.8cm}
+	top=3cm,                   % margin sizes
+	bottom=3cm,
+	left=3cm,					% originally 4cm for left and right
+	right=3cm}
 \setstretch{1.3}              % line spacing originally 1.02
 \clubpenalty=10000             % prevent orphans
 \widowpenalty=10000            % prevent widows
 
+\newcommand{\indep}{\perp \!\!\! \perp}
 
 % set section/subsection headings as the sans serif font, via titlesec package
-\titleformat{\section}{\normalfont\large\bfseries\color{black}}{\thesection.}{0.3em}{}
-\titleformat{\subsection}{\normalfont\small\bfseries\color{black}}{\thesubsection.}{0.3em}{}
-
+\titleformat{\section}{\normalfont\LARGE\bfseries\color{black}}{\thesection.}{0.3em}{}
+\titleformat{\subsection}{\normalfont\large\bfseries\color{black}}{\thesubsection.}{0.3em}{}
+%\titleformat{\subsubsection}\color{black}{\thesubsubsection.}{}{}
+% change normalfont to sffamily
 % change title spacing
 
 % page numbering
-\pagestyle{empty}
+%\pagestyle{empty}
 
 % make figure/table captions sans-serif small font
-\captionsetup{font={footnotesize,sf},labelfont=bf,labelsep=period}
+\captionsetup{font={sf},labelfont=bf,labelsep=period}
 
 % configure pdf metadata and link handling, via hyperref package
 \hypersetup{
@@ -91,16 +134,28 @@
 	pdfkeywords={\paperkeywords},
 	pdffitwindow=true,         % window fit to page when opened
 	breaklinks=true,           % break links that overflow horizontally
-	colorlinks,						% add link color
-	citecolor = interceptpurple, % add link color
-	urlcolor = interceptpurple, % add url color
-	linkcolor = Black,
+	colorlinks=true,						% add link color
+	citecolor = appleblue, % add link color DarkSlateGray
+	urlcolor = appleblue, % add url color LightCoral
+	linkcolor = appleblue,
 	%colorlinks=false,          % remove link color
 	pdfborder={0 0 0}          % remove link border
 }
 
-\definecolor{interceptpurple}{rgb}{0.4, 0.32, 1.0}
 
+\definecolor{applegrey7rw}{HTML}{121214}
+\definecolor{applepink}{HTML}{1C1C1E}
+\definecolor{buckeyescarlet}{HTML}{bb0000}
+\definecolor{appleblue}{HTML}{0070C9}
+\definecolor{interceptpurple}{rgb}{0.4, 0.32, 1.0}
+\definecolor{dollarbill}{rgb}{0.52, 0.73, 0.4}
+\definecolor{darkcoral}{rgb}{0.8, 0.36, 0.27}
+\definecolor{fuzzywuzzy}{rgb}{0.8, 0.4, 0.4}
+\definecolor{midnightgreen}{rgb}{0.0, 0.39, 0.33}
+\definecolor{oxfordblue}{rgb}{0.0, 0.13, 0.28}
+\definecolor{pear}{rgb}{0.82, 0.99, 0.19}
+
+\color{applegrey7rw}
 % configure watermark appearance: to turn it on/off use [final] argument at package import
 \SetWatermarkText{Draft}
 \SetWatermarkScale{1.3}
