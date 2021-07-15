@@ -1,3 +1,4 @@
+
 % This is a template for rapidly starting new Latex documents.
 % Some considerations:
 %   - use pdflatex instead of xelatex or lualatex for compatibility with arxiv and publishers
@@ -12,9 +13,9 @@
 \newcommand{\myemail}{rward48@gatech.edu}
 \newcommand{\myaffiliation}{Georgia Institute of Technology}
 \newcommand{\paperdate}{November 2019}
-\newcommand{\papertitle}{Prior Ties, Division of Labor and Team Success} %social structure of recombinant search
+\newcommand{\papertitle}{Why they do that? An investigation.}
 
-% Collective Search
+
 \newcommand{\papercitation}{Ward, R. 2021. \papertitle. Under review at \emph{Journal Name}.}
 \newcommand{\paperkeywords}{Science of Science, Organization, Networks, Bibliometrics}
 \newcommand{\acknowledgments}{Red Bull Energy Drink}
@@ -27,13 +28,21 @@
 % begin preamble setup
 %-------------------------------------------------------------------------------------------
 \RequirePackage[l2tabu,orthodox]{nag}   % warn if using any obsolete or outdated commands
-\documentclass[11pt,letterpaper]{article} % document style
+\documentclass[12pt,letterpaper]{article} % document style
 
 % import encoding and font packages for pdflatex, in order
 \usepackage[T1]{fontenc}                % output T1 font encoding (8-bit) so accented characters are a single glyph
 \usepackage[utf8]{inputenc}             % allow input of utf-8 encoded characters
-\usepackage{utopia}                    % document's serif font, in the style of minion pro | crimson,  utopia is nice too
-\usepackage{helvet}                     % document's sans serif font, helvetica
+\usepackage{helvet}                    % document's serif font, in the style of minion pro | crimson,  utopia is nice too, so is cochineal
+
+%\usepackage{utopia} 
+%\usepackage[adobe-utopia]{mathdesign}
+% document's sans serif font, helvetica
+%\usepackage{erewhon}
+% packages for algorithms
+\usepackage{algorithm}
+\usepackage{arevmath}     % For math symbols
+\usepackage[noend]{algpseudocode}
 
 % import language and regionalization packages, in order
 \usepackage[strict,autostyle]{csquotes} % smart and nestable quote marks
@@ -42,10 +51,10 @@
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{mathtools}% Loads amsmath
-
+\usepackage[adobe-utopia]{mathdesign}
 % import everything else
 \usepackage{abstract}                   % allow full-page title/abstract in twocolumn mode
-\renewcommand{\abstractnamefont}{\textbf\large}
+\renewcommand{\abstractnamefont}{\bfseries\large}
 \usepackage{authblk}                    % footnote-style author/affiliation info
 \setlength{\affilsep}{1em}
 %\renewcommand\Affilfont{\emph}
@@ -109,14 +118,14 @@
 	bottom=3cm,
 	left=3cm,					% originally 4cm for left and right
 	right=3cm}
-\setstretch{1.3}              % line spacing originally 1.02
+\setstretch{1.618}              % line spacing originally 1.02
 \clubpenalty=10000             % prevent orphans
 \widowpenalty=10000            % prevent widows
 
 \newcommand{\indep}{\perp \!\!\! \perp}
 
 % set section/subsection headings as the sans serif font, via titlesec package
-\titleformat{\section}{\normalfont\LARGE\bfseries\color{black}}{\thesection.}{0.3em}{}
+\titleformat{\section}{\normalfont\Large\bfseries\color{black}}{\thesection.}{0.3em}{}
 \titleformat{\subsection}{\normalfont\large\bfseries\color{black}}{\thesubsection.}{0.3em}{}
 %\titleformat{\subsubsection}\color{black}{\thesubsubsection.}{}{}
 % change normalfont to sffamily
@@ -137,26 +146,23 @@
 	pdffitwindow=true,         % window fit to page when opened
 	breaklinks=true,           % break links that overflow horizontally
 	colorlinks=true,						% add link color
-	citecolor = appleblue, % add link color DarkSlateGray
-	urlcolor = appleblue, % add url color LightCoral
-	linkcolor = appleblue,
+	citecolor = offblack, % add link color DarkSlateGray
+	urlcolor = offblack, % add url color LightCoral
+	linkcolor = offblack,
 	pdfborder={0 0 0}          % remove link border
 }
 
-
-\definecolor{applegrey7rw}{HTML}{121214}
-\definecolor{applepink}{HTML}{1C1C1E}
 \definecolor{buckeyescarlet}{HTML}{bb0000}
 \definecolor{appleblue}{HTML}{0070C9}
 \definecolor{interceptpurple}{rgb}{0.4, 0.32, 1.0}
 \definecolor{dollarbill}{rgb}{0.52, 0.73, 0.4}
 \definecolor{darkcoral}{rgb}{0.8, 0.36, 0.27}
-\definecolor{fuzzywuzzy}{rgb}{0.8, 0.4, 0.4}
 \definecolor{midnightgreen}{rgb}{0.0, 0.39, 0.33}
 \definecolor{oxfordblue}{rgb}{0.0, 0.13, 0.28}
 \definecolor{pear}{rgb}{0.82, 0.99, 0.19}
+\definecolor{offblack}{gray}{0.07} % defines the shade of black used throughout
+\color{offblack} % sets off black 
 
-\color{applegrey7rw}
 % configure watermark appearance: to turn it on/off use [final] argument at package import
 \SetWatermarkText{Draft}
 \SetWatermarkScale{1.3}
@@ -166,32 +172,26 @@
 % end preamble setup, begin document
 %-------------------------------------------------------------------------------------------
 \begin{document}
-	
+	\onehalfspacing
 	\title{\textbf{\papertitle}}
-	\author[1,2]{Robert Ward\thanks{Email: \href{mailto:\myemail}{\myemail}}}
-	\author[2]{Marc Santolini}
-	
-	\affil[1]{\myaffiliation}
-	\affil[2]{CRI Paris}
-	
-\maketitle
-	
+	\author{Robert Ward\thanks{Email: \href{mailto:\myemail}{\myemail}} }
+	\affil{\myaffiliation}
+	\date{\today}
+	\maketitle
 	\begin{abstract}
-		In this paper we examine how prior ties and division of labor affect team success.  We propose that the effects of division of labor on (performance and) success are moderated by the extent to which team members have preexisting relationships amongst one another.  Using the iGEM competition as a strategic research site, we make two hypotheses.  First, 
+
+		
+		%	\noindent	\small{{\textbf{Keywords:}} Interdisciplinarity, Evaluation, Information Theory, Natural Language Processing, Sociology of Science, Bibliometrics}
 	\end{abstract}
+	%\vspace{2em}
 	
+	
+	\setstretch{1.618}
 	\clearpage
-	
+
 	\section*{Introduction}
 	
-	% bureaucratization of science increasing
-	
-	
-	Bureaucratization and social cohesion on their face seem to be opposing concepts.  \citep{}
-	
-	
-%	Following santolin et al we use the iGEM competition as a strategic research site to understand how task allocation in scientific teams affects the work that they produce.  In this paper we investigate both static and dynamic effects.  and also control for individual level attributes.  the dependent variable is deep success.
-	
+
 	
 	Lorem ipsum\endnote{This is my note.} dolor sit amet, \emph{consectetur} adipiscing elit. Mauris fermentum sapien at libero finibus, lacinia tincidunt mi varius. \enquote{Vestibulum eget pretium urna.} Phasellus consectetur sem eu egestas scelerisque. Etiam tempor porttitor nulla, et rhoncus dui. Praesent iaculis sollicitudin augue et luctus. Quisque congue odio a suscipit sodales. Nullam mattis, ligula at vulputate lacinia, est nisi faucibus felis, ac gravida orci ligula sit amet nulla. Sed commodo magna semper interdum facilisis. Proin porttitor tortor a purus convallis malesuada \citep{leahey_prominent_2017}. Ut tempus eleifend eros, lacinia lobortis urna rhoncus ut. Donec in sapien tincidunt, consectetur velit ut, posuere nibh. Cras finibus imperdiet sem nec placerat. Donec efficitur metus eu sapien semper elementum. Nullam eros dui, rhoncus lacinia libero ac, pretium pellentesque justo. In a laoreet mauris, ac sollicitudin erat. Phasellus mattis tincidunt diam id sagittis.
 	
